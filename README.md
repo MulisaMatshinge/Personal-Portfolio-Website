@@ -9,4 +9,4 @@ My personal portfolio showcasing my skills, projects, certifications and educati
 - Vite
 
 ## Live Site
-[mulisamportfolio.vercel.app)
+mulisamportfolio.vercel.app
