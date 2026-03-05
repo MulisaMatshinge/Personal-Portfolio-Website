@@ -7,6 +7,3 @@ My personal portfolio showcasing my skills, projects, certifications and educati
 - Node.js
 - React
 - Vite
-
-## Live Site
-mulisamportfolio.vercel.app
