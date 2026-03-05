@@ -7,3 +7,5 @@ My personal portfolio showcasing my skills, projects, certifications and educati
 - Node.js
 - React
 - Vite
+#Cloud Deployment
+- Vercel
