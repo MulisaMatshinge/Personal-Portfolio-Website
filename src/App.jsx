@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from "react";
 
 const NAV_LINKS = ["About", "Skills", "Projects", "Certifications", "Contact"];
 
-const CV_URL = "https://drive.google.com/uc?export=download&id=1lz6QcXyROHZiBbhwCRlJGNccC5nFTjPL";
+const CV_URL = "https://drive.google.com/file/d/1lz6QcXyROHZiBbhwCRlJGNccC5nFTjPL/view?usp=sharing";
 
 const skillsData = [
-  { category: "Programming & Query Languages", items: ["Python", "SQL", "R", "Bash"] },
+  { category: "Programming & Query Languages", items: ["Python", "SQL", "Java", "Bash"] },
   { category: "Data Engineering & Pipelines", items: ["Apache Airflow", "dbt", "Spark", "Kafka", "ETL/ELT"] },
   { category: "Cloud & Infrastructure", items: ["Microsoft Azure", "Azure Data Factory", "Azure Synapse", "Docker"] },
   { category: "Analytics & BI Tools", items: ["Power BI", "Excel", "Pandas", "NumPy", "Matplotlib"] },
@@ -13,26 +13,20 @@ const skillsData = [
   { category: "Business Systems", items: ["Business Analysis", "Requirements Gathering", "Process Modelling", "ERP Concepts"] },
 ];
 
-const PROJECT_TYPES = ["Data Analysis / BI", "Data Engineering", "Software Development"];
+const PROJECT_TYPES = ["Business Intelligence", "Data Engineering"];
 
 const projectsData = {
-  "Data Analysis / BI": [
+  "Business Intelligence": [
     { comingSoon: true, tags: ["Power BI", "Excel", "Data Analysis"] },
     { comingSoon: true, tags: ["Python", "Matplotlib", "Pandas"] },
-    { comingSoon: true, tags: ["SQL", "Tableau", "Reporting"] },
-    { comingSoon: true, tags: ["NumPy", "Statistics", "Visualization"] },
+    { comingSoon: true, tags: ["SQL", "Reporting", "Visualization"] },
+    { comingSoon: true, tags: ["NumPy", "Statistics", "Dashboards"] },
   ],
   "Data Engineering": [
     { comingSoon: true, tags: ["Airflow", "dbt", "Spark"] },
     { comingSoon: true, tags: ["Python", "SQL", "Azure"] },
     { comingSoon: true, tags: ["Kafka", "ETL/ELT", "PostgreSQL"] },
     { comingSoon: true, tags: ["Azure Data Factory", "Azure Synapse", "Docker"] },
-  ],
-  "Software Development": [
-    { comingSoon: true, tags: ["Python", "REST API", "PostgreSQL"] },
-    { comingSoon: true, tags: ["Bash", "Docker", "Linux"] },
-    { comingSoon: true, tags: ["SQL", "Backend", "Azure"] },
-    { comingSoon: true, tags: ["Python", "Automation", "Scripting"] },
   ],
 };
 
@@ -79,7 +73,7 @@ const IconLocation = () => (
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("about");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeProjectType, setActiveProjectType] = useState("Data Analysis / BI");
+  const [activeProjectType, setActiveProjectType] = useState("Business Intelligence");
   const [animatingProjects, setAnimatingProjects] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [formSent, setFormSent] = useState(false);
@@ -238,10 +232,10 @@ export default function Portfolio() {
           <div className="hero-line"><h1 className="hero-title"><span className="hero-word" style={{ animationDelay: "0.3s", color: "#c8a96e" }}>Mulisa</span></h1></div>
           <div className="hero-line"><h1 className="hero-title"><span className="hero-word" style={{ animationDelay: "0.4s", WebkitTextStroke: "1px #444", color: "transparent" }}>Matshinge.</span></h1></div>
           <p className="fade-in" style={{ fontSize: "1.05rem", color: "#777", lineHeight: "1.9", maxWidth: "600px", marginTop: "40px", marginBottom: "12px", animationDelay: "0.6s" }}>
-            Final-year <span style={{ color: "#bbb" }}>Bachelor of Information Technology in Business Systems</span> student at IIE Rosebank College, and active <span style={{ color: "#bbb" }}>ALX Data Engineering</span> programme trainee. I build end-to-end data solutions — from ingestion pipelines to business intelligence — using Python, SQL, and cloud-native tools on Azure.
+            Final-year <span style={{ color: "#bbb" }}>Bachelor of Information Technology in Business Systems</span> student at IIE Rosebank College, and active <span style={{ color: "#bbb" }}>ALX Data Engineering</span> programme trainee. I design and build data solutions — from dashboards and pipelines for diverse business scenarios to cloud-native analytics on Azure.
           </p>
           <p className="fade-in" style={{ fontSize: "1.05rem", color: "#777", lineHeight: "1.9", maxWidth: "600px", marginBottom: "48px", animationDelay: "0.7s" }}>
-            I've shipped <span style={{ color: "#bbb" }}>real-time ETL pipelines</span> handling billions of records using Kafka, Spark, and Docker — and I hold certifications in <span style={{ color: "#bbb" }}>Azure Fundamentals (AZ-900)</span> and <span style={{ color: "#bbb" }}>Power BI Data Analyst (PL-300)</span>. Currently seeking graduate roles in Data Engineering, Analytics, or Business Intelligence.
+            I hold certifications in <span style={{ color: "#bbb" }}>Azure Fundamentals (AZ-900)</span> and <span style={{ color: "#bbb" }}>Power BI Data Analyst (PL-300)</span>, and I bring hands-on experience with Kafka, Spark, and Docker. Seeking graduate roles in <span style={{ color: "#bbb" }}>Data Engineering, Data Analysis, or Business Intelligence / Business Analysis</span>.
           </p>
           <div className="hero-buttons fade-in" style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "center", animationDelay: "0.8s" }}>
             <a href={CV_URL} target="_blank" rel="noreferrer" className="btn-primary">↓ Download My CV</a>
