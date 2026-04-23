@@ -3,6 +3,31 @@ import { useState, useEffect, useRef } from "react";
 const NAV_LINKS = ["About", "Skills", "Projects", "Certifications", "Contact"];
 const CV_URL = "https://drive.google.com/file/d/1lz6QcXyROHZiBbhwCRlJGNccC5nFTjPL/view?usp=sharing";
 
+const skillLogos = {
+  "Python": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+  "SQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azuresqldatabase/azuresqldatabase-original.svg",
+  "Java (OOP)": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
+  "PowerShell": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/powershell/powershell-original.svg",
+  "dbt": "https://cdn.jsdelivr.net/gh/gilbarbara/logos/logos/dbt.svg",
+  "Apache Kafka": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg",
+  "Apache Spark": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachespark/apachespark-original.svg",
+  "Microsoft Azure": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg",
+  "Azure Data Factory": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg",
+  "Google Cloud Platform": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg",
+  "BigQuery": "https://cdn.jsdelivr.net/gh/gilbarbara/logos/logos/google-bigquery.svg",
+  "Docker": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+  "Power BI": "https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg",
+  "Excel": "https://upload.wikimedia.org/wikipedia/commons/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg",
+  "Pandas": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg",
+  "NumPy": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg",
+  "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+  "MySQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+  "MongoDB": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+  "Snowflake": "https://cdn.jsdelivr.net/gh/gilbarbara/logos/logos/snowflake.svg",
+  "Azure SQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azure/azure-original.svg",
+  "Agile": "https://cdn.jsdelivr.net/gh/gilbarbara/logos/logos/jira.svg",
+};
+
 const skillsData = [
   { category: "Languages", items: ["Python", "SQL", "Java (OOP)", "PowerShell"] },
   { category: "Data Engineering", items: ["ETL/ELT", "dbt", "Apache Kafka", "Apache Spark", "Kimball Modelling", "Data Warehousing"] },
@@ -52,7 +77,7 @@ const certificationsData = [
     issuer: "DataCamp",
     year: "2024",
     verifyUrl: "#",
-    logo: null,
+    logo: "https://cdn.jsdelivr.net/gh/gilbarbara/logos/logos/datacamp.svg",
   },
   {
     name: "Database Design",
@@ -60,7 +85,7 @@ const certificationsData = [
     issuer: "DataCamp",
     year: "2024",
     verifyUrl: "#",
-    logo: null,
+    logo: "https://cdn.jsdelivr.net/gh/gilbarbara/logos/logos/datacamp.svg",
   },
   {
     name: "Data Analytics",
@@ -313,8 +338,14 @@ export default function Portfolio() {
           color: #3A3530; padding: 4px 10px;
           background: rgba(15,15,15,0.06);
           cursor: default; transition: all 0.12s;
+          display: inline-flex; align-items: center; gap: 6px;
         }
         .skill-pill:hover { background: #0F0F0F; color: #F0EDE6; }
+        .skill-pill:hover .skill-logo { filter: brightness(0) invert(1); }
+        .skill-logo {
+          width: 14px; height: 14px; object-fit: contain;
+          flex-shrink: 0; transition: filter 0.12s;
+        }
 
         /* ─── PROJECTS ─── */
         .proj-tabs { display: flex; gap: 0; margin-bottom: 36px; }
@@ -592,7 +623,19 @@ export default function Portfolio() {
               <div key={category} className="skill-cell">
                 <div className="skill-cat mono">{category}</div>
                 <div className="skill-pills">
-                  {items.map((item) => <span key={item} className="skill-pill sans">{item}</span>)}
+                  {items.map((item) => (
+                    <span key={item} className="skill-pill sans">
+                      {skillLogos[item] && (
+                        <img
+                          src={skillLogos[item]}
+                          alt=""
+                          className="skill-logo"
+                          onError={(e) => { e.target.style.display = "none"; }}
+                        />
+                      )}
+                      {item}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
