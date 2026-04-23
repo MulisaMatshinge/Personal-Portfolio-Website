@@ -4,30 +4,38 @@ const NAV_LINKS = ["About", "Skills", "Projects", "Certifications", "Contact"];
 const CV_URL = "https://drive.google.com/file/d/1lz6QcXyROHZiBbhwCRlJGNccC5nFTjPL/view?usp=sharing";
 
 const skillsData = [
-  { category: "Programming & Query Languages", items: ["Python", "SQL", "Java", "Bash"] },
-  { category: "Data Engineering & Pipelines", items: ["Apache Airflow", "dbt", "Spark", "Kafka", "ETL/ELT"] },
-  { category: "Cloud & Infrastructure", items: ["Microsoft Azure", "Azure Data Factory", "Azure Synapse", "Docker"] },
-  { category: "Analytics & BI Tools", items: ["Power BI", "Excel", "Pandas", "NumPy", "Matplotlib"] },
-  { category: "Databases & Storage", items: ["PostgreSQL", "MySQL", "Azure SQL", "Data Warehousing"] },
-  { category: "Business Systems", items: ["Business Analysis", "Requirements Gathering", "Process Modelling", "ERP Concepts"] },
+  { category: "Languages", items: ["Python", "SQL", "Java (OOP)", "PowerShell"] },
+  { category: "Data Engineering", items: ["ETL/ELT", "dbt", "Apache Kafka", "Apache Spark", "Kimball Modelling", "Data Warehousing"] },
+  { category: "Cloud", items: ["Microsoft Azure", "Azure Data Factory", "Google Cloud Platform", "BigQuery", "Docker"] },
+  { category: "Analytics & BI", items: ["Power BI", "DAX", "Power Query", "Excel", "Pandas", "NumPy"] },
+  { category: "Databases", items: ["PostgreSQL", "MySQL", "MongoDB", "Snowflake", "Azure SQL", "Relational Design"] },
+  { category: "Business Analysis", items: ["Agile", "Business Analysis", "Systems Analysis", "Requirements Gathering", "Process Modelling"] },
 ];
 
-const PROJECT_TYPES = ["Data Analysis & BI", "Data Engineering"];
-
-const projectsData = {
-  "Data Analysis & BI": [
-    { comingSoon: true, tags: ["Power BI", "Excel", "Business Intelligence"] },
-    { comingSoon: true, tags: ["Python", "Matplotlib", "Pandas"] },
-    { comingSoon: true, tags: ["SQL", "Reporting", "Visualization"] },
-    { comingSoon: true, tags: ["NumPy", "Statistics", "Dashboards"] },
-  ],
-  "Data Engineering": [
-    { comingSoon: true, tags: ["Airflow", "dbt", "Spark"] },
-    { comingSoon: true, tags: ["Python", "SQL", "Azure"] },
-    { comingSoon: true, tags: ["Kafka", "ETL/ELT", "PostgreSQL"] },
-    { comingSoon: true, tags: ["Azure Data Factory", "Azure Synapse", "Docker"] },
-  ],
-};
+const projectsData = [
+  {
+    title: "RFM Customer Segment Analysis",
+    subtitle: "SQL · Power BI · BigQuery · GCP",
+    desc: "5-step SQL transformation pipeline scoring 287+ customers using NTILE(10) decile RFM logic, segmented into 8 behavioural groups with an interactive Power BI dashboard.",
+    link: "https://github.com/MulisaMatshinge/RFM-customer-segmentation",
+    tags: ["Power BI", "BigQuery", "DAX"],
+  },
+  {
+    title: "Maji Ndogo Water Access BI",
+    subtitle: "Power BI · MySQL · Jupyter · DAX",
+    desc: "10-page drill-through Power BI report across 5 provinces tracking 25,398 projects and $163.89M budget, modelled interventions projecting +66% national water access improvement.",
+    link: "https://github.com/MulisaMatshinge/Maji-Ndogo-Water-Crisis-Analysis",
+    tags: ["Power BI", "MySQL", "Python"],
+  },
+  {
+    title: "Data Engineering Pipeline",
+    subtitle: "Python · Airflow · dbt · PostgreSQL",
+    desc: null,
+    link: null,
+    tags: ["Airflow", "dbt", "PostgreSQL"],
+    comingSoon: true,
+  },
+];
 
 const certificationsData = [
   {
@@ -35,16 +43,38 @@ const certificationsData = [
     code: "AZ-900",
     issuer: "Microsoft",
     year: "2024",
-    color: "#0078D4",
     verifyUrl: "https://learn.microsoft.com/api/credentials/share/en-us/TshisikhaweMulisaMatshinge-9826/24D4F5B42318A3B7?sharingId=E9F6A69E114FEA48",
     logo: "https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg",
+  },
+  {
+    name: "Associate SQL Data Engineer",
+    code: "DataCamp",
+    issuer: "DataCamp",
+    year: "2024",
+    verifyUrl: "#",
+    logo: null,
+  },
+  {
+    name: "Database Design",
+    code: "DataCamp",
+    issuer: "DataCamp",
+    year: "2024",
+    verifyUrl: "#",
+    logo: null,
+  },
+  {
+    name: "Data Analytics",
+    code: "ALX Africa",
+    issuer: "ALX Africa",
+    year: "2025",
+    verifyUrl: "#",
+    logo: null,
   },
 ];
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("about");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeProjectType, setActiveProjectType] = useState("Data Analysis & BI");
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [formSent, setFormSent] = useState(false);
   const sectionsRef = useRef({});
@@ -52,7 +82,7 @@ export default function Portfolio() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => { entries.forEach((e) => { if (e.isIntersecting) setActiveSection(e.target.id); }); },
-      { threshold: 0.25 }
+      { threshold: 0.2 }
     );
     Object.values(sectionsRef.current).forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
@@ -65,7 +95,7 @@ export default function Portfolio() {
 
   const handleSend = () => {
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
-    const subject = encodeURIComponent("Portfolio message from " + formData.name);
+    const subject = encodeURIComponent("Portfolio contact from " + formData.name);
     const body = encodeURIComponent("Name: " + formData.name + "\nEmail: " + formData.email + "\n\n" + formData.message);
     window.location.href = "mailto:mulisamatshinge4@gmail.com?subject=" + subject + "&body=" + body;
     setFormData({ name: "", email: "", message: "" });
@@ -73,282 +103,436 @@ export default function Portfolio() {
     setTimeout(() => setFormSent(false), 5000);
   };
 
-  const currentProjects = projectsData[activeProjectType];
-
   return (
-    <div style={{ fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif", background: "#f5f4f0", color: "#1a1a1a", minHeight: "100vh" }}>
+    <div style={{ background: "#F0EDE6", color: "#0F0F0F", minHeight: "100vh" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Geist+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@300;400;500;600;700&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
-        ::-webkit-scrollbar { width: 3px; }
-        ::-webkit-scrollbar-thumb { background: #1a1a1a; }
+        ::-webkit-scrollbar { width: 2px; }
+        ::-webkit-scrollbar-thumb { background: #0F0F0F; }
 
-        body { background: #f5f4f0; }
+        body { background: #F0EDE6; overflow-x: hidden; }
 
-        .syne { font-family: 'Syne', sans-serif; }
-        .serif { font-family: 'Instrument Serif', serif; }
+        .mono { font-family: 'Geist Mono', monospace; }
+        .serif { font-family: 'DM Serif Display', Georgia, serif; }
+        .sans { font-family: 'Bricolage Grotesque', sans-serif; }
 
-        /* NAV */
-        .nav-bar {
-          position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-          background: #f5f4f0;
-          border-bottom: 1px solid #d8d5ce;
+        /* ─── NAV ─── */
+        .nav {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 200;
           display: flex; align-items: center; justify-content: space-between;
-          padding: 0 40px; height: 56px;
+          padding: 0 48px; height: 52px;
+          background: #F0EDE6;
+          border-bottom: 1px solid rgba(15,15,15,0.12);
         }
-        .nav-logo { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: -0.01em; color: #1a1a1a; }
-        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-id {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.72rem; font-weight: 400;
+          letter-spacing: 0.02em; color: #0F0F0F;
+        }
+        .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
         .nav-links a {
-          font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 500;
-          color: #888; text-decoration: none; letter-spacing: 0.01em;
-          transition: color 0.15s; cursor: pointer;
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.7rem; font-weight: 400;
+          color: #888; text-decoration: none; letter-spacing: 0.08em;
+          text-transform: lowercase; cursor: pointer; transition: color 0.15s;
         }
-        .nav-links a:hover, .nav-links a.active { color: #1a1a1a; }
+        .nav-links a:hover, .nav-links a.active { color: #0F0F0F; }
+        .nav-cv {
+          font-family: 'Geist Mono', monospace; font-size: 0.68rem;
+          background: #0F0F0F; color: #F0EDE6;
+          padding: 6px 14px; text-decoration: none; letter-spacing: 0.06em;
+          transition: opacity 0.15s;
+        }
+        .nav-cv:hover { opacity: 0.75; }
 
-        .hamburger { display: none; cursor: pointer; background: none; border: none; padding: 4px; flex-direction: column; gap: 4px; }
-        .hamburger span { display: block; width: 22px; height: 1.5px; background: #1a1a1a; transition: all 0.25s; }
+        .hamburger {
+          display: none; background: none; border: none; cursor: pointer;
+          flex-direction: column; gap: 5px; padding: 2px;
+        }
+        .hamburger span { display: block; width: 20px; height: 1px; background: #0F0F0F; transition: all 0.2s; }
 
-        /* MOBILE NAV */
         .mobile-menu {
-          display: none; position: fixed; inset: 0; background: #f5f4f0; z-index: 99;
-          flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+          display: none; position: fixed; inset: 0;
+          background: #0F0F0F; z-index: 199;
+          flex-direction: column; align-items: center; justify-content: center; gap: 28px;
         }
         .mobile-menu.open { display: flex; }
         .mobile-menu a {
-          font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 700;
-          color: #1a1a1a; text-decoration: none; cursor: pointer;
+          font-family: 'DM Serif Display', serif;
+          font-size: 2.8rem; color: #F0EDE6;
+          text-decoration: none; cursor: pointer;
+          letter-spacing: -0.02em;
         }
+        .mobile-menu a:hover { font-style: italic; }
 
-        /* SECTIONS */
-        section { padding: 100px 40px; border-bottom: 1px solid #d8d5ce; }
-        section:last-of-type { border-bottom: none; }
-
-        .section-label {
-          font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 600;
-          letter-spacing: 0.12em; text-transform: uppercase; color: #999;
-          margin-bottom: 48px;
+        /* ─── HERO ─── */
+        .hero {
+          min-height: 100vh;
+          padding: 120px 48px 72px;
+          display: grid;
+          grid-template-rows: 1fr auto;
+          border-bottom: 1px solid rgba(15,15,15,0.12);
         }
-
-        /* HERO */
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 64px; padding-top: 120px; }
+        .hero-top {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0;
+          align-items: end;
+        }
+        .hero-name-block { padding-bottom: 0; }
+        .hero-eyebrow {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.68rem; font-weight: 400;
+          letter-spacing: 0.14em; text-transform: uppercase;
+          color: #888; margin-bottom: 24px;
+          display: flex; align-items: center; gap: 12px;
+        }
+        .hero-eyebrow::after { content: ''; display: block; width: 32px; height: 1px; background: #888; }
 
         .hero-name {
-          font-family: 'Syne', sans-serif;
-          font-size: clamp(3.5rem, 10vw, 9rem);
-          font-weight: 800;
-          line-height: 0.88;
-          letter-spacing: -0.04em;
-          color: #1a1a1a;
-          margin-bottom: 48px;
-        }
-        .hero-name em {
-          font-family: 'Instrument Serif', serif;
-          font-style: italic;
+          font-family: 'DM Serif Display', Georgia, serif;
+          font-size: clamp(2.8rem, 5.5vw, 5.2rem);
           font-weight: 400;
-          color: #888;
+          line-height: 1.0;
+          letter-spacing: -0.02em;
+          color: #0F0F0F;
+        }
+        .hero-name .italic { font-style: italic; color: #5C5445; }
+
+        .hero-right {
+          padding-left: 72px;
+          border-left: 1px solid rgba(15,15,15,0.12);
+          display: flex; flex-direction: column; justify-content: flex-end;
+          padding-bottom: 4px;
+          gap: 20px;
         }
 
-        .hero-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
         .hero-bio {
-          max-width: 480px; font-size: 1rem; line-height: 1.7; color: #555;
+          font-family: 'Bricolage Grotesque', sans-serif;
+          font-size: 1.05rem;
+          line-height: 1.75;
+          color: #3A3530;
+          font-weight: 300;
         }
-        .hero-bio strong { color: #1a1a1a; font-weight: 500; }
-
-        .hero-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
-        .hero-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-        .hero-tag {
-          font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 600;
-          letter-spacing: 0.06em; text-transform: uppercase;
-          background: #1a1a1a; color: #f5f4f0;
-          padding: 6px 12px; border-radius: 2px;
+        .hero-bio strong {
+          font-weight: 600;
+          color: #0F0F0F;
         }
 
-        /* BUTTONS */
+        .hero-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .hero-chip {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.65rem; font-weight: 500;
+          letter-spacing: 0.08em; text-transform: uppercase;
+          border: 1px solid rgba(15,15,15,0.25);
+          color: #555; padding: 5px 10px;
+        }
+        .hero-chip.filled { background: #0F0F0F; color: #F0EDE6; border-color: #0F0F0F; }
+
+        .hero-bottom {
+          padding-top: 32px;
+          margin-top: 28px;
+          border-top: 1px solid rgba(15,15,15,0.12);
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 16px;
+        }
+        .hero-status {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.68rem; color: #888;
+          display: flex; align-items: center; gap: 8px;
+        }
+        .status-dot {
+          width: 7px; height: 7px; border-radius: 50%;
+          background: #4CAF50;
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+
+        .hero-ctas { display: flex; gap: 10px; }
+
+        /* ─── BUTTONS ─── */
         .btn {
           display: inline-flex; align-items: center; gap: 8px;
-          font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 600;
-          letter-spacing: 0.05em; text-decoration: none; cursor: pointer;
-          border-radius: 2px; transition: all 0.18s;
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.72rem; font-weight: 500;
+          letter-spacing: 0.06em; text-decoration: none;
+          cursor: pointer; transition: all 0.18s;
+          border: none;
         }
-        .btn-dark { background: #1a1a1a; color: #f5f4f0; border: 1px solid #1a1a1a; padding: 12px 24px; }
-        .btn-dark:hover { background: #333; }
-        .btn-light { background: transparent; color: #1a1a1a; border: 1px solid #c8c5be; padding: 12px 24px; }
-        .btn-light:hover { border-color: #1a1a1a; }
-        .btn-ghost { background: transparent; color: #555; border: 1px solid #d8d5ce; padding: 8px 16px; font-size: 0.73rem; }
-        .btn-ghost:hover { color: #1a1a1a; border-color: #1a1a1a; }
+        .btn-solid { background: #0F0F0F; color: #F0EDE6; padding: 11px 22px; }
+        .btn-solid:hover { background: #3A3530; }
+        .btn-outline { background: transparent; color: #0F0F0F; padding: 10px 22px; border: 1px solid rgba(15,15,15,0.3); }
+        .btn-outline:hover { border-color: #0F0F0F; }
+        .btn-ghost { background: transparent; color: #888; padding: 7px 14px; border: 1px solid rgba(15,15,15,0.15); font-size: 0.67rem; }
+        .btn-ghost:hover { color: #0F0F0F; border-color: rgba(15,15,15,0.4); }
 
-        /* SKILLS */
-        .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid #d8d5ce; }
-        .skill-block {
-          padding: 32px; border-right: 1px solid #d8d5ce; border-bottom: 1px solid #d8d5ce;
-        }
-        .skill-block:nth-child(3n) { border-right: none; }
-        .skill-block:nth-last-child(-n+3) { border-bottom: none; }
+        /* ─── SECTIONS ─── */
+        section { padding: 88px 48px; border-bottom: 1px solid rgba(15,15,15,0.12); }
+        section:last-of-type { border-bottom: none; }
+        .section-inner { max-width: 1200px; margin: 0 auto; }
 
-        .skill-category {
-          font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700;
-          letter-spacing: 0.1em; text-transform: uppercase; color: #1a1a1a;
-          margin-bottom: 16px;
+        .section-label {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.65rem; font-weight: 400;
+          letter-spacing: 0.16em; text-transform: uppercase;
+          color: #888; margin-bottom: 52px;
+          display: flex; align-items: center; gap: 16px;
         }
-        .skill-items { display: flex; flex-wrap: wrap; gap: 6px; }
-        .skill-item {
-          font-family: 'Syne', sans-serif; font-size: 0.76rem; font-weight: 500;
-          color: #666; background: #eceae5; padding: 4px 10px; border-radius: 2px;
-          transition: all 0.15s;
-        }
-        .skill-item:hover { background: #1a1a1a; color: #f5f4f0; }
+        .section-label::before { content: ''; display: block; width: 20px; height: 1px; background: #888; }
 
-        /* PROJECTS */
-        .project-tabs { display: flex; gap: 0; margin-bottom: 40px; border-bottom: 1px solid #d8d5ce; }
-        .project-tab {
-          font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 600;
-          color: #999; background: none; border: none; padding: 12px 24px 12px 0;
-          cursor: pointer; letter-spacing: 0.02em; border-bottom: 2px solid transparent;
+        /* ─── SKILLS ─── */
+        .skills-wrap { display: grid; grid-template-columns: repeat(3, 1fr); }
+        .skill-cell {
+          padding: 32px 28px;
+          border-right: 1px solid rgba(15,15,15,0.1);
+          border-bottom: 1px solid rgba(15,15,15,0.1);
+        }
+        .skill-cell:nth-child(3n) { border-right: none; }
+        .skill-cell:nth-last-child(-n+3) { border-bottom: none; }
+
+        .skill-cat {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.63rem; font-weight: 500;
+          letter-spacing: 0.14em; text-transform: uppercase;
+          color: #888; margin-bottom: 14px;
+        }
+        .skill-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+        .skill-pill {
+          font-family: 'Bricolage Grotesque', sans-serif;
+          font-size: 0.8rem; font-weight: 400;
+          color: #3A3530; padding: 4px 10px;
+          background: rgba(15,15,15,0.06);
+          cursor: default; transition: all 0.12s;
+        }
+        .skill-pill:hover { background: #0F0F0F; color: #F0EDE6; }
+
+        /* ─── PROJECTS ─── */
+        .proj-tabs { display: flex; gap: 0; margin-bottom: 36px; }
+        .proj-tab {
+          font-family: 'Geist Mono', monospace; font-size: 0.7rem; font-weight: 400;
+          color: #999; background: none; border: none; cursor: pointer;
+          letter-spacing: 0.08em; text-transform: lowercase;
+          padding: 10px 20px 10px 0; margin-right: 20px;
+          border-bottom: 1px solid transparent;
           margin-bottom: -1px; transition: all 0.15s;
         }
-        .project-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
-        .project-tab:hover { color: #1a1a1a; }
+        .proj-tab.active { color: #0F0F0F; border-bottom-color: #0F0F0F; }
+        .proj-tab:hover { color: #0F0F0F; }
 
-        .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: #d8d5ce; border: 1px solid #d8d5ce; }
-        .project-card {
-          background: #f5f4f0; padding: 40px 32px;
-          display: flex; flex-direction: column; gap: 24px;
-          min-height: 200px; transition: background 0.2s;
+        .proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(15,15,15,0.12); }
+        .proj-card {
+          background: #F0EDE6; padding: 36px 32px;
+          min-height: 220px; display: flex; flex-direction: column;
+          gap: 16px; transition: background 0.18s; position: relative;
         }
-        .project-card:hover { background: #fff; }
-        .project-num { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; color: #ccc; }
-        .project-coming {
-          font-family: 'Instrument Serif', serif; font-style: italic;
-          font-size: 1.4rem; color: #ccc; flex: 1; display: flex; align-items: center;
+        .proj-card:hover { background: #EAE7DF; }
+
+        .proj-num {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.62rem; color: rgba(15,15,15,0.25); font-weight: 400;
         }
-        .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-        .project-tag {
-          font-family: 'Syne', sans-serif; font-size: 0.68rem; font-weight: 600;
+        .proj-title {
+          font-family: 'DM Serif Display', serif;
+          font-size: 1.25rem; line-height: 1.2;
+          color: #0F0F0F; letter-spacing: -0.01em;
+          flex: 1;
+        }
+        .proj-title.coming {
+          font-style: italic; color: rgba(15,15,15,0.2);
+          font-size: 1.1rem;
+        }
+        .proj-sub {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.65rem; color: #888; margin-top: -8px;
+        }
+        .proj-desc {
+          font-family: 'Bricolage Grotesque', sans-serif;
+          font-size: 0.85rem; line-height: 1.65;
+          color: #5C5445; font-weight: 300;
+        }
+        .proj-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+        .proj-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+        .proj-tag {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.6rem; font-weight: 400;
           letter-spacing: 0.06em; text-transform: uppercase;
-          color: #999; background: #eceae5; padding: 4px 8px; border-radius: 2px;
+          color: #999; background: rgba(15,15,15,0.06); padding: 3px 7px;
         }
 
-        /* CERTS */
-        .cert-item {
-          display: flex; align-items: center; gap: 24px;
-          padding: 32px 0; border-bottom: 1px solid #d8d5ce;
+        /* ─── CERTS ─── */
+        .cert-row {
+          display: flex; align-items: center; gap: 20px;
+          padding: 28px 0; border-bottom: 1px solid rgba(15,15,15,0.1);
         }
-        .cert-item:first-child { border-top: 1px solid #d8d5ce; }
-        .cert-badge {
-          width: 64px; height: 64px; flex-shrink: 0;
-          border: 1px solid #d8d5ce; border-radius: 4px;
+        .cert-row:first-child { border-top: 1px solid rgba(15,15,15,0.1); }
+        .cert-icon {
+          width: 52px; height: 52px; flex-shrink: 0;
+          border: 1px solid rgba(15,15,15,0.1);
           background: #fff; display: flex; align-items: center; justify-content: center;
           padding: 8px;
         }
-        .cert-badge img { width: 100%; height: 100%; object-fit: contain; }
-        .cert-info { flex: 1; }
+        .cert-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .cert-icon-fallback {
+          width: 52px; height: 52px; flex-shrink: 0;
+          background: #0F0F0F; display: flex; align-items: center; justify-content: center;
+        }
+        .cert-icon-fallback span {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.6rem; color: #F0EDE6; letter-spacing: 0.06em; text-align: center;
+        }
         .cert-name {
-          font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
-          color: #1a1a1a; margin-bottom: 4px;
+          font-family: 'Bricolage Grotesque', sans-serif;
+          font-size: 1rem; font-weight: 500; color: #0F0F0F; margin-bottom: 4px;
         }
-        .cert-meta { font-size: 0.82rem; color: #888; }
-        .cert-coming {
-          font-family: 'Instrument Serif', serif; font-style: italic;
-          font-size: 1rem; color: #ccc; padding: 32px 0;
-          border-bottom: 1px solid #d8d5ce;
+        .cert-meta {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.65rem; color: #888; letter-spacing: 0.04em;
+        }
+        .cert-more {
+          font-family: 'DM Serif Display', serif; font-style: italic;
+          font-size: 0.95rem; color: rgba(15,15,15,0.3);
+          padding: 28px 0;
         }
 
-        /* CONTACT */
-        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
-        .contact-info { display: flex; flex-direction: column; gap: 0; }
-        .contact-row {
-          display: flex; align-items: center; justify-content: space-between;
-          padding: 20px 0; border-bottom: 1px solid #d8d5ce;
+        /* ─── CONTACT ─── */
+        .contact-wrap {
+          display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: start;
         }
-        .contact-row:first-child { border-top: 1px solid #d8d5ce; }
-        .contact-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #999; }
-        .contact-val { font-size: 0.9rem; color: #1a1a1a; text-decoration: none; }
-        .contact-val:hover { text-decoration: underline; }
-
-        .form-field { display: flex; flex-direction: column; gap: 6px; }
-        .form-label { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #999; }
-        .form-input {
-          background: transparent; border: none; border-bottom: 1px solid #d8d5ce;
-          padding: 12px 0; font-size: 0.95rem; color: #1a1a1a; outline: none;
-          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-          transition: border-color 0.15s; width: 100%;
+        .contact-headline {
+          font-family: 'DM Serif Display', serif;
+          font-size: clamp(2rem, 3vw, 2.8rem);
+          line-height: 1.1; letter-spacing: -0.02em;
+          color: #0F0F0F; margin-bottom: 32px;
         }
-        .form-input:focus { border-bottom-color: #1a1a1a; }
-        .form-input::placeholder { color: #bbb; }
-        textarea.form-input { resize: none; }
+        .contact-headline em { font-style: italic; color: #5C5445; }
 
-        /* FOOTER */
+        .contact-list { display: flex; flex-direction: column; }
+        .contact-item {
+          display: flex; justify-content: space-between; align-items: baseline;
+          padding: 16px 0; border-bottom: 1px solid rgba(15,15,15,0.1);
+        }
+        .contact-item:first-child { border-top: 1px solid rgba(15,15,15,0.1); }
+        .contact-key {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.63rem; letter-spacing: 0.12em;
+          text-transform: uppercase; color: #888;
+        }
+        .contact-val {
+          font-family: 'Bricolage Grotesque', sans-serif;
+          font-size: 0.88rem; color: #0F0F0F;
+          text-decoration: none; font-weight: 400;
+        }
+        .contact-val:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+        .form-wrap { display: flex; flex-direction: column; gap: 24px; }
+        .form-label {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.62rem; letter-spacing: 0.12em;
+          text-transform: uppercase; color: #888;
+          display: block; margin-bottom: 7px;
+        }
+        .form-control {
+          width: 100%; background: transparent;
+          border: none; border-bottom: 1px solid rgba(15,15,15,0.2);
+          padding: 10px 0; font-size: 0.95rem;
+          color: #0F0F0F; outline: none;
+          font-family: 'Bricolage Grotesque', sans-serif;
+          font-weight: 300;
+          transition: border-color 0.15s;
+        }
+        .form-control:focus { border-bottom-color: #0F0F0F; }
+        .form-control::placeholder { color: rgba(15,15,15,0.25); }
+        textarea.form-control { resize: none; }
+
+        /* ─── FOOTER ─── */
         footer {
-          padding: 24px 40px; display: flex; justify-content: space-between;
-          align-items: center; border-top: 1px solid #d8d5ce; flex-wrap: wrap; gap: 12px;
+          padding: 20px 48px;
+          display: flex; justify-content: space-between; align-items: center;
+          flex-wrap: wrap; gap: 8px;
+          border-top: 1px solid rgba(15,15,15,0.12);
         }
-        footer span { font-family: 'Syne', sans-serif; font-size: 0.72rem; color: #aaa; font-weight: 500; }
+        .footer-left {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.65rem; color: #888; font-weight: 400;
+        }
+        .footer-right {
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.65rem; color: rgba(15,15,15,0.25);
+        }
 
-        /* TOAST */
+        /* ─── TOAST ─── */
         .toast {
           position: fixed; bottom: 32px; left: 50%;
           transform: translateX(-50%) translateY(20px);
-          background: #1a1a1a; color: #f5f4f0;
-          font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 600;
-          letter-spacing: 0.06em; padding: 14px 28px;
-          opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; border-radius: 2px;
+          background: #0F0F0F; color: #F0EDE6;
+          font-family: 'Geist Mono', monospace;
+          font-size: 0.7rem; letter-spacing: 0.08em;
+          padding: 12px 24px; opacity: 0;
+          transition: all 0.3s; pointer-events: none; z-index: 999;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        @media (max-width: 768px) {
-          section { padding: 72px 24px; }
-          .nav-bar { padding: 0 24px; }
+        /* ─── MOBILE ─── */
+        @media (max-width: 900px) {
+          .nav { padding: 0 24px; }
+          .nav-links, .nav-cv { display: none; }
           .hamburger { display: flex; }
-          .nav-links { display: none; }
-          .hero-name { font-size: clamp(2.8rem, 14vw, 5rem); }
-          .hero-bottom { flex-direction: column; align-items: flex-start; }
-          .hero-actions { align-items: flex-start; }
-          .hero-tags { justify-content: flex-start; }
-          .skills-grid { grid-template-columns: 1fr; }
-          .skill-block { border-right: none; }
-          .skill-block:nth-last-child(-n+3) { border-bottom: 1px solid #d8d5ce; }
-          .skill-block:last-child { border-bottom: none; }
-          .projects-grid { grid-template-columns: 1fr; }
-          .contact-grid { grid-template-columns: 1fr; gap: 48px; }
-          footer { padding: 24px; }
+
+          section { padding: 64px 24px; }
+          .hero { padding: 96px 24px 56px; }
+
+          .hero-top { grid-template-columns: 1fr; gap: 40px; }
+          .hero-right { border-left: none; border-top: 1px solid rgba(15,15,15,0.12); padding-left: 0; padding-top: 32px; }
+
+          .hero-name { font-size: clamp(2.4rem, 10vw, 3.5rem); }
+
+          .skills-wrap { grid-template-columns: 1fr 1fr; }
+          .skill-cell:nth-child(2n) { border-right: none; }
+          .skill-cell:nth-child(3n) { border-right: 1px solid rgba(15,15,15,0.1); }
+          .skill-cell:nth-child(2n) { border-right: none; }
+
+          .proj-grid { grid-template-columns: 1fr; }
+          .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
+          footer { padding: 20px 24px; }
+        }
+
+        @media (max-width: 600px) {
+          .skills-wrap { grid-template-columns: 1fr; }
+          .skill-cell { border-right: none !important; }
+          .skill-cell:nth-last-child(-n+1) { border-bottom: none; }
         }
       `}</style>
 
-      {/* TOAST */}
-      <div className={"toast" + (formSent ? " show" : "")}>Message sent — I'll get back to you soon</div>
+      <div className={"toast" + (formSent ? " show" : "")}>Message opened in your mail client</div>
 
       {/* NAV */}
-      <nav className="nav-bar">
-        <div className="nav-logo syne">Mulisa Matshinge</div>
+      <nav className="nav">
+        <span className="nav-id mono">mulisa-matshinge.v1</span>
         <ul className="nav-links">
           {NAV_LINKS.map((n) => (
             <li key={n}>
               <a
                 className={activeSection === n.toLowerCase() ? "active" : ""}
                 onClick={() => scrollTo(n.toLowerCase())}
-              >{n}</a>
+              >{n.toLowerCase()}</a>
             </li>
           ))}
         </ul>
-        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} style={{ display: "none" }}>
+        <a href={CV_URL} target="_blank" rel="noreferrer" className="nav-cv mono">↓ cv</a>
+        <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
           <span style={{ transform: menuOpen ? "rotate(45deg) translate(4px, 4px)" : "none" }} />
           <span style={{ opacity: menuOpen ? 0 : 1 }} />
           <span style={{ transform: menuOpen ? "rotate(-45deg) translate(4px, -4px)" : "none" }} />
-        </button>
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{
-            display: "none", background: "none", border: "none", cursor: "pointer",
-            flexDirection: "column", gap: "4px", padding: "4px"
-          }}
-          className="hamburger"
-        >
-          <span />
-          <span />
-          <span />
         </button>
       </nav>
 
@@ -360,34 +544,40 @@ export default function Portfolio() {
       </div>
 
       {/* HERO */}
-      <section id="about" ref={(el) => (sectionsRef.current.about = el)} className="hero" style={{ borderBottom: "1px solid #d8d5ce" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", width: "100%" }}>
-          <p className="section-label" style={{ marginBottom: 32 }}>Data Engineer & Analyst — Pretoria, South Africa</p>
+      <section id="about" ref={(el) => (sectionsRef.current.about = el)} className="hero">
+        <div className="section-inner">
+          <div className="hero-top">
+            <div className="hero-name-block">
+              <p className="hero-eyebrow mono">Data Engineer · Analyst · Pretoria, ZA</p>
+              <h1 className="hero-name serif">
+                Tshisikhawe<br />
+                <span className="italic">Mulisa</span><br />
+                Matshinge
+              </h1>
+            </div>
 
-          <h1 className="hero-name">
-            Tshisikhawe<br />
-            <em>Mulisa</em><br />
-            Matshinge
-          </h1>
+            <div className="hero-right">
+              <p className="hero-bio sans">
+                Final-year <strong>BIT (Business Systems)</strong> student at IIE Rosebank College and active trainee in the <strong>ALX Africa Data Engineering Programme</strong>. I've built end-to-end data solutions, from SQL transformation pipelines in BigQuery that score and segment customers, to 10-page drill-through Power BI reports tracking infrastructure projects across five provinces.
+                <br /><br />
+                My stack spans <strong>Python, SQL, Power BI, Azure, and GCP</strong>, with growing experience in data modelling (Kimball), ETL/ELT workflows, Docker, and Apache Kafka. I'm <strong>Microsoft AZ-900 certified</strong> and hold DataCamp credentials in SQL data engineering and database design.
+                <br /><br />
+                I'm looking for graduate roles in <strong>Data Engineering, Business Intelligence, or Business Analysis</strong> where I can contribute from day one and keep growing fast.
+              </p>
+              <div className="hero-chips">
+                <span className="hero-chip filled mono">Open to work</span>
+              </div>
+            </div>
+          </div>
 
           <div className="hero-bottom">
-            <p className="hero-bio">
-              Final-year <strong>BIT in Business Systems</strong> student at Rosebank College,
-              training in the <strong>ALX Data Engineering</strong> programme. I build data pipelines,
-              dashboards, and cloud analytics on Azure. Certified in <strong>AZ-900</strong> and <strong>PL-300</strong>.
-              Looking for graduate roles in Data Engineering, BI, or Business Analysis.
-            </p>
-
-            <div className="hero-actions">
-              <div className="hero-tags">
-                <span className="hero-tag">AZ-900</span>
-                <span className="hero-tag">PL-300</span>
-                <span className="hero-tag">ALX</span>
-              </div>
-              <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-                <a href={CV_URL} target="_blank" rel="noreferrer" className="btn btn-dark">Download CV ↓</a>
-                <button className="btn btn-light" onClick={() => scrollTo("projects")}>View work →</button>
-              </div>
+            <div className="hero-status mono">
+              <span className="status-dot" />
+              Available for graduate roles · Pretoria / Remote
+            </div>
+            <div className="hero-ctas">
+              <a href={CV_URL} target="_blank" rel="noreferrer" className="btn btn-solid mono">↓ download cv</a>
+              <button className="btn btn-outline mono" onClick={() => scrollTo("projects")}>view projects →</button>
             </div>
           </div>
         </div>
@@ -395,14 +585,14 @@ export default function Portfolio() {
 
       {/* SKILLS */}
       <section id="skills" ref={(el) => (sectionsRef.current.skills = el)}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <p className="section-label">Skills</p>
-          <div className="skills-grid">
+        <div className="section-inner">
+          <p className="section-label mono">Skills</p>
+          <div className="skills-wrap">
             {skillsData.map(({ category, items }) => (
-              <div key={category} className="skill-block">
-                <div className="skill-category">{category}</div>
-                <div className="skill-items">
-                  {items.map((item) => <span key={item} className="skill-item">{item}</span>)}
+              <div key={category} className="skill-cell">
+                <div className="skill-cat mono">{category}</div>
+                <div className="skill-pills">
+                  {items.map((item) => <span key={item} className="skill-pill sans">{item}</span>)}
                 </div>
               </div>
             ))}
@@ -412,123 +602,135 @@ export default function Portfolio() {
 
       {/* PROJECTS */}
       <section id="projects" ref={(el) => (sectionsRef.current.projects = el)}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <p className="section-label">Projects</p>
-          <div className="project-tabs">
-            {PROJECT_TYPES.map((type) => (
-              <button
-                key={type}
-                className={"project-tab" + (activeProjectType === type ? " active" : "")}
-                onClick={() => setActiveProjectType(type)}
-              >{type}</button>
-            ))}
-          </div>
-          <div className="projects-grid">
-            {currentProjects.map((p, i) => (
-              <div key={activeProjectType + i} className="project-card">
-                <span className="project-num">0{i + 1}</span>
-                <span className="project-coming">Coming soon</span>
-                <div className="project-tags">
-                  {p.tags.map((t) => <span key={t} className="project-tag">{t}</span>)}
-                </div>
+        <div className="section-inner">
+          <p className="section-label mono">Projects</p>
+          <div className="proj-grid">
+            {projectsData.map((p, i) => (
+              <div key={i} className="proj-card">
+                <span className="proj-num mono">0{i + 1}</span>
+                {p.comingSoon ? (
+                  <>
+                    <span className="proj-title coming serif">coming soon</span>
+                    <div className="proj-tags" style={{ marginTop: "auto" }}>
+                      {p.tags.map((t) => <span key={t} className="proj-tag mono">{t}</span>)}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="proj-title serif">{p.title}</div>
+                    <div className="proj-sub mono">{p.subtitle}</div>
+                    <div className="proj-desc sans">{p.desc}</div>
+                    <div className="proj-footer">
+                      <div className="proj-tags">
+                        {p.tags.map((t) => <span key={t} className="proj-tag mono">{t}</span>)}
+                      </div>
+                      {p.link && (
+                        <a href={p.link} target="_blank" rel="noreferrer" className="btn btn-ghost mono">
+                          github ↗
+                        </a>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>
+          <div className="cert-more serif" style={{ marginTop: 0, borderTop: "1px solid rgba(15,15,15,0.1)", paddingTop: 28 }}>More on the way.</div>
         </div>
       </section>
 
       {/* CERTIFICATIONS */}
       <section id="certifications" ref={(el) => (sectionsRef.current.certifications = el)}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <p className="section-label">Certifications</p>
-
+        <div className="section-inner">
+          <p className="section-label mono">Certifications</p>
           {certificationsData.map((cert, i) => (
-            <div key={i} className="cert-item">
-              <div className="cert-badge">
-                <img
-                  src={cert.logo}
-                  alt={cert.code}
-                  onError={(e) => { e.target.style.display = "none"; }}
-                />
+            <div key={i} className="cert-row">
+              {cert.logo ? (
+                <div className="cert-icon">
+                  <img src={cert.logo} alt={cert.code} onError={(e) => { e.target.parentElement.innerHTML = `<span class="mono" style="font-size:0.55rem;color:#888;text-align:center;padding:4px;">${cert.code}</span>`; }} />
+                </div>
+              ) : (
+                <div className="cert-icon-fallback">
+                  <span className="mono">{cert.code.slice(0, 3).toUpperCase()}</span>
+                </div>
+              )}
+              <div style={{ flex: 1 }}>
+                <div className="cert-name sans">{cert.name}</div>
+                <div className="cert-meta mono">{cert.issuer} · {cert.year}</div>
               </div>
-              <div className="cert-info">
-                <div className="cert-name">{cert.name}</div>
-                <div className="cert-meta">{cert.issuer} · {cert.code} · {cert.year}</div>
-              </div>
-              <a href={cert.verifyUrl} target="_blank" rel="noreferrer" className="btn btn-ghost">
-                Verify ↗
-              </a>
+              {cert.verifyUrl !== "#" && (
+                <a href={cert.verifyUrl} target="_blank" rel="noreferrer" className="btn btn-ghost mono">verify ↗</a>
+              )}
             </div>
           ))}
-
-          <div className="cert-coming">More certifications on the way...</div>
+          <div className="cert-more serif">More on the way.</div>
         </div>
       </section>
 
       {/* CONTACT */}
       <section id="contact" ref={(el) => (sectionsRef.current.contact = el)}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <p className="section-label">Contact</p>
-          <div className="contact-grid">
+        <div className="section-inner">
+          <p className="section-label mono">Contact</p>
+          <div className="contact-wrap">
             <div>
-              <p style={{ fontSize: "1.1rem", lineHeight: 1.7, color: "#555", marginBottom: 40, maxWidth: 360 }}>
-                Open to graduate programmes, internships, and learnerships in Data Engineering,
-                Analytics, BI, and Business Analysis. Let's talk.
-              </p>
-              <div className="contact-info">
+              <h2 className="contact-headline serif">
+                Let's build something <em>meaningful</em>
+              </h2>
+              <div className="contact-list">
                 {[
-                  { label: "Email", value: "mulisamatshinge4@gmail.com", href: "mailto:mulisamatshinge4@gmail.com" },
-                  { label: "LinkedIn", value: "mulisa-matshinge", href: "https://www.linkedin.com/in/mulisa-matshinge" },
-                  { label: "GitHub", value: "MulisaMatshinge", href: "https://github.com/MulisaMatshinge" },
-                  { label: "Location", value: "Pretoria, South Africa", href: null },
-                ].map(({ label, value, href }) => (
-                  <div key={label} className="contact-row">
-                    <span className="contact-label">{label}</span>
-                    {href
-                      ? <a href={href} className="contact-val">{value}</a>
-                      : <span className="contact-val" style={{ color: "#888" }}>{value}</span>
-                    }
+                  { key: "Email", val: "mulisamatshinge4@gmail.com", href: "mailto:mulisamatshinge4@gmail.com" },
+                  { key: "LinkedIn", val: "mulisa-matshinge", href: "https://www.linkedin.com/in/mulisa-matshinge" },
+                  { key: "GitHub", val: "MulisaMatshinge", href: "https://github.com/MulisaMatshinge" },
+                  { key: "Location", val: "Pretoria, South Africa", href: null },
+                ].map(({ key, val, href }) => (
+                  <div key={key} className="contact-item">
+                    <span className="contact-key mono">{key}</span>
+                    {href ? (
+                      <a href={href} className="contact-val sans">{val}</a>
+                    ) : (
+                      <span className="contact-val sans" style={{ color: "#888" }}>{val}</span>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-              <div className="form-field">
-                <label className="form-label">Name</label>
-                <input
-                  className="form-input"
-                  placeholder="Your name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                />
-              </div>
-              <div className="form-field">
-                <label className="form-label">Email</label>
-                <input
-                  className="form-input"
-                  placeholder="your@email.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
-              </div>
-              <div className="form-field">
-                <label className="form-label">Message</label>
+            <div className="form-wrap">
+              {[
+                { label: "Name", key: "name", type: "input", placeholder: "Your name" },
+                { label: "Email", key: "email", type: "input", placeholder: "your@email.com" },
+              ].map(({ label, key, placeholder }) => (
+                <div key={key}>
+                  <label className="form-label mono">{label}</label>
+                  <input
+                    className="form-control sans"
+                    placeholder={placeholder}
+                    value={formData[key]}
+                    onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
+                  />
+                </div>
+              ))}
+              <div>
+                <label className="form-label mono">Message</label>
                 <textarea
-                  className="form-input"
-                  placeholder="What's on your mind?"
+                  className="form-control sans"
+                  placeholder="What are you working on?"
                   rows={5}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 />
               </div>
               <button
-                className="btn btn-dark"
+                className="btn btn-solid mono"
                 onClick={handleSend}
                 disabled={!formData.name.trim() || !formData.email.trim() || !formData.message.trim()}
-                style={{ opacity: (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) ? 0.4 : 1, alignSelf: "flex-start" }}
+                style={{
+                  opacity: (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) ? 0.35 : 1,
+                  alignSelf: "flex-start",
+                  cursor: (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) ? "not-allowed" : "pointer",
+                }}
               >
-                Send message →
+                send message →
               </button>
             </div>
           </div>
@@ -536,8 +738,8 @@ export default function Portfolio() {
       </section>
 
       <footer>
-        <span>© 2026 Tshisikhawe Mulisa Matshinge</span>
-        <span>Data Engineering · Business Analysis</span>
+        <span className="footer-left mono">© 2026 Tshisikhawe Mulisa Matshinge</span>
+        <span className="footer-right mono">data engineering · business analysis · pretoria</span>
       </footer>
     </div>
   );
